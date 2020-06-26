@@ -1,0 +1,59 @@
+{
+  "name": "checks",
+  "version": "1.0.0",
+  "description": "",
+  "files": [
+    "dist",
+    "readme.md"
+  ],
+  "dependencies": {
+    "ts-interface-checker": "^0.1.11",
+    "yargs": "^15.3.1"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.2",
+    "@types/jest": "^25.2.1",
+    "@types/prettyjson": "^0.0.29",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "eslint": "^7.3.0",
+    "glob": "^7.1.6",
+    "glob-promise": "^3.4.0",
+    "jest": "^25.3.0",
+    "joi": "^14.3.1",
+    "prettier": "^2.0.4",
+    "prettyjson": "^1.2.1",
+    "ts-interface-builder": "^0.2.2",
+    "ts-jest": "^25.4.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "scripts": {
+    "prestart": "ts-interface-builder src/types/check.ts",
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "test": "jest --coverage",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexhayton/checks"
+  },
+  "keywords": [],
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "node_modules",
+      "generators/app/templates"
+    ],
+    "transform": {
+      "^.+\\.ts?$": "ts-jest"
+    }
+  },
+  "author": "alexhayton",
+  "bugs": {
+    "url": "https://github.com/alexhayton/checks/issues"
+  },
+  "homepage": "https://github.com/alexhayton/checks#readme",
+  "private": true
+}
