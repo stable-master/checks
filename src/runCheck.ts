@@ -1,6 +1,5 @@
 import { CheckResult, CheckResultString, Check } from "./types";
 import glob from "glob-promise";
-import prettyjson from "prettyjson";
 import { isValidCheck } from "./checkCheck";
 
 interface Args {
@@ -9,10 +8,10 @@ interface Args {
 }
 
 interface CheckImport {
-  default: any;
+  default: unknown;
 }
 
-export async function runChecks({ testPattern, projectPath }: Args) {
+export async function runChecks({ testPattern, projectPath }: Args): Promise<CheckResult[]> {
   if (!testPattern) {
     testPattern = "./src/checks/*.check.ts";
   }
@@ -53,5 +52,5 @@ export async function runChecks({ testPattern, projectPath }: Args) {
       return checkResult;
     })
   );
-  console.log(prettyjson.render(checkResults));
+  return checkResults;
 }
