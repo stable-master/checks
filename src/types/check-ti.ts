@@ -4,14 +4,23 @@
 import * as t from "ts-interface-checker";
 // tslint:disable:object-literal-key-quotes
 
+export const CheckFunctionArgs = t.iface([], {
+  "projectPath": "string",
+});
+
+export const CheckFunction = t.func("boolean", t.param("args", "CheckFunctionArgs"));
+
 export const Check = t.iface([], {
   "name": "string",
-  "description": "string",
+  "description": t.opt("string"),
+  "onlyForReposWithLabels": t.opt(t.array("string")),
   "skip": t.opt("boolean"),
-  "checkFunction": t.func("boolean", t.param("projectName", "string")),
+  "checkFunction": "CheckFunction",
 });
 
 const exportedTypeSuite: t.ITypeSuite = {
+  CheckFunctionArgs,
+  CheckFunction,
   Check,
 };
 export default exportedTypeSuite;
