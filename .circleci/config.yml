@@ -27,6 +27,8 @@ jobs:
 
   test:
     executor: node
+    environment:
+      CODECOV_TOKEN: "b5dbc314-8ca9-441f-9d10-466cd1542a64"
     steps:
       - checkout
       - attach_workspace:
@@ -34,6 +36,9 @@ jobs:
       - run:
           name: Run tests
           command: yarn test
+      - run:
+          name: Upload coverage
+          command: bash <(curl -s https://codecov.io/bash)
 
 
   lint:

@@ -31,13 +31,13 @@ export async function runChecks({ testPattern, projectPath }: Args) {
       const checkImport = (await import(`../${checkFilename}`)) as CheckImport;
       const check = isValidCheck(checkImport.default);
 
-      const { name, description, checkFunction, skip } = check;
+      const { name, checkFunction, skip } = check;
 
       let result: CheckResultString = "fail";
       let error: Error | undefined = undefined;
       if (!skip) {
         try {
-          const resultBool = await checkFunction(projectPathWithDefault);
+          const resultBool = await checkFunction({ projectPath: projectPathWithDefault });
           result = resultBool ? "pass" : "fail";
         } catch (err) {
           result = "error";
