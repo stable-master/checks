@@ -1,0 +1,85 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:12
+
+jobs:
+  install:
+    executor: node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: yarn --frozen-lockfile
+      - run:
+          name: Run tests
+          command: yarn test
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  test:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Run tests
+          command: yarn test
+
+
+  lint:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Run lint
+          command: yarn lint
+
+  deploy:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/.npmrc
+      - run:
+          name: Publish package
+          command: |
+            mkdir ~/.ssh/
+            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+            git config --global user.email "${GIT_EMAIL}"
+            git config --global user.name "${GIT_USERNAME}"
+            git branch --set-upstream-to master
+            npx release-it
+
+workflows:
+  version: 2
+  test-deploy:
+    jobs:
+      - install
+      - test:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - deploy:
+          context: npm-publish
+          requires:
+            - lint
+            - test
+          filters:
+            branches:
+              only: master

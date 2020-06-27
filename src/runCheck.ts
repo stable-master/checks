@@ -12,7 +12,7 @@ interface CheckImport {
   default: any;
 }
 
-export async function runChecksLocally({ testPattern, projectPath }: Args) {
+export async function runChecks({ testPattern, projectPath }: Args) {
   if (!testPattern) {
     testPattern = "./src/checks/*.check.ts";
   }
