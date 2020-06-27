@@ -14,9 +14,6 @@ jobs:
           keys:
           - v1-dependencies-{{ checksum "yarn.lock" }}
       - run: yarn --frozen-lockfile
-      - run:
-          name: Run tests
-          command: yarn test
       - save_cache:
           paths:
             - node_modules
