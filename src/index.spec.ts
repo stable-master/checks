@@ -51,8 +51,8 @@ describe("index", () => {
       expect(runChecks).toBeInstanceOf(Function);
     });
 
-    it("should export runChecksFromCommandLine", () => {
-      expect(runChecksFromCommandLine).toBeInstanceOf(Function);
+    it("should not export runChecksFromCommandLine", () => {
+      expect(runChecksFromCommandLine).not.toBeInstanceOf(Function);
     });
   });
 });
