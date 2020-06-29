@@ -3,12 +3,12 @@ import prettyjson from "prettyjson";
 import { argv } from "yargs";
 
 export async function runChecksFromCommandLine(): Promise<void> {
-  const testPattern = argv.testPattern as string;
+  const checksPattern = argv.checksPattern as string;
   const projectPath = argv.projectPath as string;
 
   const results = await runChecks({
-    testPattern,
-    projectPath,
+    checksPattern: checksPattern || "./src/checks/*.check.ts",
+    projectPath: projectPath || ".",
   });
   console.log(prettyjson.render(results));
 }

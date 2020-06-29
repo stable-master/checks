@@ -1,33 +1,27 @@
-import { CheckResult, CheckResultString, Check } from "./types";
+import { CheckResult, CheckResultString } from "./types";
+import { resolve } from "path";
 import glob from "glob-promise";
 import { isValidCheck } from "./checkCheck";
 
 interface Args {
-  testPattern?: string;
-  projectPath?: string;
+  checksPattern: string;
+  projectPath: string;
 }
 
 interface CheckImport {
   default: unknown;
 }
 
-export async function runChecks({ testPattern, projectPath }: Args): Promise<CheckResult[]> {
-  if (!testPattern) {
-    testPattern = "./src/checks/*.check.ts";
-  }
+export async function runChecks({ checksPattern, projectPath }: Args): Promise<CheckResult[]> {
+  console.log(`Running checks against "${projectPath}"`);
 
-  let projectPathWithDefault = ".";
-  if (projectPath) {
-    projectPathWithDefault = projectPath;
-  }
-  console.log(`Running checks against "${projectPathWithDefault}"`);
-
-  const checks = await glob(testPattern);
+  const checks = await glob(checksPattern);
   console.log(`Found ${checks.length} check${checks.length !== 1 ? "s" : ""}`);
 
   const checkResults = await Promise.all(
     checks.map(async (checkFilename: string) => {
-      const checkImport = (await import(`../${checkFilename}`)) as CheckImport;
+      const absPath = resolve(checkFilename);
+      const checkImport = (await import(absPath)) as CheckImport;
       const check = isValidCheck(checkImport.default);
 
       const { name, checkFunction, skip } = check;
@@ -36,7 +30,7 @@ export async function runChecks({ testPattern, projectPath }: Args): Promise<Che
       let error: Error | undefined = undefined;
       if (!skip) {
         try {
-          const resultBool = await checkFunction({ projectPath: projectPathWithDefault });
+          const resultBool = await checkFunction({ projectPath });
           result = resultBool ? "pass" : "fail";
         } catch (err) {
           result = "error";

@@ -3,7 +3,6 @@
   "version": "1.0.4",
   "description": "",
   "main": "dist/index.js",
-  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -38,7 +37,7 @@
     "prestart": "yarn generateTypeChecks",
     "prebuild": "yarn generateTypeChecks",
     "build": "tsc",
-    "start": "ts-node src/index.ts",
+    "start": "tsc --watch",
     "test": "jest --coverage",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "format": "prettier --write \"src/**/!(*.spec).ts\""
