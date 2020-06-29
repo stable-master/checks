@@ -4,7 +4,6 @@ import {
   CheckFunction,
   isValidCheck,
   runChecks,
-  runChecksFromCommandLine,
 } from ".";
 
 describe("index", () => {
@@ -49,10 +48,6 @@ describe("index", () => {
 
     it("should export runChecks", () => {
       expect(runChecks).toBeInstanceOf(Function);
-    });
-
-    it("should not export runChecksFromCommandLine", () => {
-      expect(runChecksFromCommandLine).not.toBeInstanceOf(Function);
     });
   });
 });
